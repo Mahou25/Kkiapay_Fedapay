@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kkiapay_flutter_sdk/kkiapay_flutter_sdk.dart';
-import 'package:kkiapay_fedapay/Screens/kSuccessScreen.dart';
+import 'package:kkiapay_fedapay/Screens/Kkiapay/kSuccessScreen.dart';
 
 void callback(response, context) {
   switch ( response['status'] ) {

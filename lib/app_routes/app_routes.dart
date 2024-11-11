@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_routes.dart';
-import '../Screens/fedapay.dart';
-import '../Screens/kkiapay.dart';
+import '../Screens/Fedapay/fedapay.dart';
+import '../Screens/Kkiapay/kkiapay.dart';
 
 class AppRoutes {
   static const String fedapay = '/fedapay';
