@@ -9,7 +9,7 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   final TextEditingController _amountController = TextEditingController();
 
-  void initiatePayment() async {
+  void initiatePayment(BuildContext context) async {
     try {
       final transaction = await createTransaction(
         int.parse(_amountController.text), // Montant de la transaction
@@ -20,14 +20,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
         "Doe",
         "john.doe@example.com",
         "+22997808080",
-        "bj",
+        "BJ",
       );
+
       print("Transaction réussie: $transaction");
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text("Succès"),
-          content: Text("Transaction réussie : $transaction"),
+          content: Text("Transaction réussie : ${transaction['transaction']['id']}"), // Affiche l'ID ou un autre champ pertinent
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -38,6 +40,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       );
     } catch (e) {
       print("Erreur lors de la création de la transaction: $e");
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -75,7 +78,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: initiatePayment,
+              // Pass the function reference without parentheses
+              onPressed: () => initiatePayment(context),  // Fixed this line
               child: Text("Payer"),
             ),
           ],
@@ -83,4 +87,5 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
 }

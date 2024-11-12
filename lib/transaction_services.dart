@@ -1,46 +1,44 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'config.dart';
+import 'dart:convert';
+import 'package:kkiapay_fedapay/constant.dart';
 
 Future<Map<String, dynamic>> createTransaction(
     int amount,
     String description,
-    String currencyIso,
+    String currency,
     String callbackUrl,
     String firstName,
     String lastName,
     String email,
     String phoneNumber,
-    String countryCode,
-    ) async {
-  final url = Uri.parse('$baseUrl/transactions');
+    String country) async {
+  try {
+    final response = await http.post(
+      Uri.parse(transactionURL),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'description': description,
+        'amount': amount,
+        'currency': currency,
+        'callback_url': callbackUrl,
+        'firstname': firstName,
+        'lastname': lastName,
+        'email': email,
+        'phone_number': phoneNumber,
+        'country': country,
+      }),
+    );
 
-  final headers = {
-    'Authorization': 'Bearer $apiKey',
-    'Content-Type': 'application/json',
-  };
-
-  final body = jsonEncode({
-    'description': description,
-    'amount': amount,
-    'currency': {'iso': currencyIso},
-    'callback_url': callbackUrl,
-    'customer': {
-      'firstname': firstName,
-      'lastname': lastName,
-      'email': email,
-      'phone_number': {
-        'number': phoneNumber,
-        'country': countryCode,
-      }
+    if (response.statusCode == 200) {
+      // Si la requête est réussie, on retourne la réponse de la transaction.
+      return json.decode(response.body);
+    } else {
+      throw Exception('Erreur lors de la création de la transaction');
     }
-  });
-
-  final response = await http.post(url, headers: headers, body: body);
-
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to create transaction: ${response.statusCode}');
+  } catch (e) {
+    throw Exception('Erreur lors de la création de la transaction: $e');
   }
 }
+
